@@ -1,32 +1,164 @@
-# React + TypeScript + Vite
+# 🤖 Multi-Agent Student Assistant
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+An AI-powered student assistance platform designed to provide
+personalized support for **Study, Career, and College-related queries**.
 
-Currently, two official plugins are available:
+The system uses multiple AI agents with a modern React frontend
+and FastAPI backend.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🚀 Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 📚 Study Agent
+- Subject explanations
+- Concept clarification
+- Exam preparation
+- Study guidance
+- Learning assistance
 
-## Expanding the Oxlint configuration
+### 💼 Career Agent
+- Resume guidance
+- Interview preparation
+- Job guidance
+- Skill recommendations
+- Career planning
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+### 🎓 College Agent
+- College-related questions
+- Syllabus assistance
+- Academic information
+- College document queries
+- PDF-based knowledge assistance
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+### 🔐 User Authentication
+- User registration
+- Secure login
+- Logout
+- Protected application flow
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+### 📄 PDF Document Support
+- Upload college PDF documents
+- Store documents in the project
+- Process documents for AI/RAG assistance
+
+### 📊 Student Dashboard
+- Total questions
+- Study conversations
+- Career conversations
+- College conversations
+- Uploaded documents
+
+---
+
+## 🏗️ System Architecture
+
+```text
+                 ┌─────────────────────┐
+                 │    Student User     │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │   React Frontend    │
+                 │    Neon UI          │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │    FastAPI API      │
+                 └──────────┬──────────┘
+                            │
+             ┌──────────────┼──────────────┐
+             ▼              ▼              ▼
+       ┌──────────┐   ┌──────────┐   ┌──────────┐
+       │  Study   │   │  Career  │   │ College  │
+       │  Agent   │   │  Agent   │   │  Agent   │
+       └──────────┘   └──────────┘   └─────┬────┘
+                                            │
+                                            ▼
+                                      ┌────────────┐
+                                      │ RAG / PDF  │
+                                      │ Knowledge  │
+                                      └────────────┘
+---
+
+**Paste this below it:**
+
+```markdown
+---
+
+## 🛠️ Technologies Used
+
+### Frontend
+- React
+- TypeScript
+- Vite
+- HTML5
+- CSS3
+
+### Backend
+- Python
+- FastAPI
+- Pydantic
+- Uvicorn
+
+### AI Technologies
+- Generative AI
+- Gemini AI
+- Multi-Agent Architecture
+- Retrieval-Augmented Generation (RAG)
+- Vector Database
+
+### Database & Storage
+- SQLite
+- ChromaDB
+- PDF Document Storage
+
+### Development Tools
+- Visual Studio Code
+- Git
+- GitHub
+- npm
+- Python Virtual Environment
+
+---
+
+## 📁 Project Structure
+
+```text
+multi-agent-student-assistant/
+│
+├── backend/
+│   ├── agents/
+│   │   ├── study_agent.py
+│   │   ├── career_agent.py
+│   │   └── college_agent.py
+│   │
+│   ├── rag/
+│   │   └── vector_store.py
+│   │
+│   ├── auth.py
+│   ├── auth_routes.py
+│   └── main.py
+│
+├── data/
+│   └── college_documents/
+│
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   └── vite.config.ts
+│
+├── screenshots/
+│   ├── dashboard.png
+│   ├── study-agent.png
+│   ├── career-agent.png
+│   ├── college-agent.png
+│   └── pdf-upload.png
+│
+├── .gitignore
+├── README.md
+├── requirements.txt
+└── .env

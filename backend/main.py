@@ -1,5 +1,6 @@
 from pathlib import Path
 import shutil
+import traceback
 
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,6 +10,9 @@ from backend.agents.study_agent import study_agent
 from backend.agents.career_agent import career_agent
 from backend.agents.college_agent import college_agent
 
+from backend.auth import init_auth_database
+from backend.auth_routes import router as auth_router
+
 
 # ============================================================
 # APP
@@ -16,9 +20,22 @@ from backend.agents.college_agent import college_agent
 
 app = FastAPI(
     title="Multi-Agent Student Assistant",
-    description="AI Student Assistant with Study, Career and College RAG Agents",
-    version="1.0.0"
+    description=(
+        "AI Student Assistant with Study, Career "
+        "and College RAG Agents"
+    ),
+    version="1.0.0",
 )
+
+
+# ============================================================
+# AUTHENTICATION DATABASE
+# ============================================================
+
+init_auth_database()
+
+# Add authentication routes
+app.include_router(auth_router)
 
 
 # ============================================================
@@ -42,10 +59,6 @@ class ChatRequest(BaseModel):
     message: str
 
 
-# Rebuild Pydantic model
-ChatRequest.model_rebuild()
-
-
 # ============================================================
 # ROOT
 # ============================================================
@@ -54,7 +67,7 @@ ChatRequest.model_rebuild()
 async def root():
     return {
         "message": "Multi-Agent Student Assistant API is running",
-        "status": "online"
+        "status": "online",
     }
 
 
@@ -77,18 +90,17 @@ async def study(request: ChatRequest):
         return {
             "question": request.message,
             "agent": "study",
-            "answer": result
+            "answer": result,
         }
 
     except Exception as e:
 
-        import traceback
         traceback.print_exc()
 
         return {
             "question": request.message,
             "agent": "study",
-            "answer": f"Study agent error: {str(e)}"
+            "answer": f"Study agent error: {str(e)}",
         }
 
 
@@ -111,18 +123,17 @@ async def career(request: ChatRequest):
         return {
             "question": request.message,
             "agent": "career",
-            "answer": result
+            "answer": result,
         }
 
     except Exception as e:
 
-        import traceback
         traceback.print_exc()
 
         return {
             "question": request.message,
             "agent": "career",
-            "answer": f"Career agent error: {str(e)}"
+            "answer": f"Career agent error: {str(e)}",
         }
 
 
@@ -145,18 +156,17 @@ async def college(request: ChatRequest):
         return {
             "question": request.message,
             "agent": "college",
-            "answer": result
+            "answer": result,
         }
 
     except Exception as e:
 
-        import traceback
         traceback.print_exc()
 
         return {
             "question": request.message,
             "agent": "college",
-            "answer": f"College agent error: {str(e)}"
+            "answer": f"College agent error: {str(e)}",
         }
 
 
@@ -171,7 +181,10 @@ async def chat(request: ChatRequest):
 
         message = request.message.lower()
 
-        # Simple agent routing
+        # ----------------------------------------------------
+        # CAREER ROUTING
+        # ----------------------------------------------------
+
         if any(
             word in message
             for word in [
@@ -180,7 +193,7 @@ async def chat(request: ChatRequest):
                 "skills",
                 "resume",
                 "interview",
-                "ai engineer"
+                "ai engineer",
             ]
         ):
 
@@ -189,8 +202,12 @@ async def chat(request: ChatRequest):
             return {
                 "question": request.message,
                 "agent": "career",
-                "answer": result
+                "answer": result,
             }
+
+        # ----------------------------------------------------
+        # COLLEGE ROUTING
+        # ----------------------------------------------------
 
         elif any(
             word in message
@@ -201,7 +218,7 @@ async def chat(request: ChatRequest):
                 "notes",
                 "subject",
                 "document",
-                "pdf"
+                "pdf",
             ]
         ):
 
@@ -210,8 +227,12 @@ async def chat(request: ChatRequest):
             return {
                 "question": request.message,
                 "agent": "college",
-                "answer": result
+                "answer": result,
             }
+
+        # ----------------------------------------------------
+        # STUDY ROUTING
+        # ----------------------------------------------------
 
         else:
 
@@ -220,18 +241,17 @@ async def chat(request: ChatRequest):
             return {
                 "question": request.message,
                 "agent": "study",
-                "answer": result
+                "answer": result,
             }
 
     except Exception as e:
 
-        import traceback
         traceback.print_exc()
 
         return {
             "question": request.message,
             "agent": "chat",
-            "answer": f"Chat error: {str(e)}"
+            "answer": f"Chat error: {str(e)}",
         }
 
 
@@ -240,58 +260,77 @@ async def chat(request: ChatRequest):
 # ============================================================
 
 @app.post("/upload-pdf")
-async def upload_pdf(file: UploadFile = File(...)):
+async def upload_pdf(
+    file: UploadFile = File(...)
+):
 
     try:
 
-        # Project root
+        # ----------------------------------------------------
+        # PROJECT ROOT
+        # ----------------------------------------------------
+
         project_root = (
             Path(__file__).resolve().parent.parent
         )
 
-        # PDF folder
+        # ----------------------------------------------------
+        # PDF DIRECTORY
+        # ----------------------------------------------------
+
         documents_dir = (
             project_root
             / "data"
             / "college_documents"
         )
 
-        # Create folder if it doesn't exist
         documents_dir.mkdir(
             parents=True,
-            exist_ok=True
+            exist_ok=True,
         )
 
-        # Check file
+        # ----------------------------------------------------
+        # FILE VALIDATION
+        # ----------------------------------------------------
+
         if not file.filename:
 
             return {
                 "success": False,
-                "message": "No file selected."
+                "message": "No file selected.",
             }
 
         if not file.filename.lower().endswith(".pdf"):
 
             return {
                 "success": False,
-                "message": "Only PDF files are allowed."
+                "message": "Only PDF files are allowed.",
             }
 
-        # Save PDF
+        # ----------------------------------------------------
+        # SAVE PDF
+        # ----------------------------------------------------
+
         file_path = documents_dir / file.filename
 
         with open(file_path, "wb") as buffer:
 
             shutil.copyfileobj(
                 file.file,
-                buffer
+                buffer,
             )
 
-        print("\n================ PDF UPLOAD ================")
+        print(
+            "\n================ PDF UPLOAD ================"
+        )
+
         print("File:", file.filename)
         print("Saved:", file_path)
 
-        # Try to update vector database
+        # ----------------------------------------------------
+        # UPDATE VECTOR DATABASE
+        # ----------------------------------------------------
+
         try:
 
             from backend.rag.vector_store import (
@@ -306,7 +345,6 @@ async def upload_pdf(file: UploadFile = File(...)):
 
         except Exception as vector_error:
 
-            import traceback
             traceback.print_exc()
 
             return {
@@ -316,25 +354,28 @@ async def upload_pdf(file: UploadFile = File(...)):
                     "database update failed."
                 ),
                 "filename": file.filename,
-                "vector_error": str(vector_error)
+                "vector_error": str(vector_error),
             }
+
+        # ----------------------------------------------------
+        # SUCCESS
+        # ----------------------------------------------------
 
         return {
             "success": True,
             "message": (
                 "PDF uploaded and processed successfully."
             ),
-            "filename": file.filename
+            "filename": file.filename,
         }
 
     except Exception as e:
 
-        import traceback
         traceback.print_exc()
 
         return {
             "success": False,
-            "message": f"PDF upload error: {str(e)}"
+            "message": f"PDF upload error: {str(e)}",
         }
 
 
@@ -350,6 +391,10 @@ async def startup_event():
     print(" Multi-Agent Student Assistant")
     print(" FastAPI Backend Started")
     print("==============================================")
+    print("Authentication:")
+    print("  Register : /auth/register")
+    print("  Login    : /auth/login")
+    print("----------------------------------------------")
     print("Study   : /study")
     print("Career  : /career")
     print("College : /college")

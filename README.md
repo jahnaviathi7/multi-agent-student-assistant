@@ -7,24 +7,28 @@ An AI-powered student assistant that provides personalized support for **study, 
 ## ✨ Features
 
 ### 📚 Study Agent
+
 - Academic concept explanations
 - Exam preparation
 - Technical questions
 - Simple and structured answers
 
 ### 💼 Career Agent
+
 - Career guidance
 - Interview preparation
 - Resume guidance
 - Skill development suggestions
 
 ### 🎓 College Agent
+
 - College-related assistance
 - Study material support
 - PDF document processing
 - Academic assistance
 
 ### 📊 Dashboard
+
 - Total questions
 - Study questions
 - Career questions
@@ -33,9 +37,11 @@ An AI-powered student assistant that provides personalized support for **study, 
 - AI service status
 
 ### 📄 PDF Upload
+
 Upload college study materials in PDF format for use with the College AI assistant.
 
 ### 💬 Chat System
+
 - Interactive AI chat
 - Agent selection
 - Chat history
@@ -69,6 +75,64 @@ Upload college study materials in PDF format for use with the College AI assista
 
 ---
 
+## 🔐 User Authentication
+
+The application includes secure user authentication.
+
+### Features
+
+- User registration
+- Full name
+- Email
+- Password
+- User login
+- User logout
+- Authentication-based access
+
+### Authentication Flow
+
+```text
+        ┌──────────────────┐
+        │      Student     │
+        └────────┬─────────┘
+                 │
+                 ▼
+        ┌──────────────────┐
+        │ Register / Login │
+        └────────┬─────────┘
+                 │
+                 ▼
+        ┌──────────────────┐
+        │ Authentication   │
+        │     System       │
+        └────────┬─────────┘
+                 │
+                 ▼
+        ┌──────────────────┐
+        │    Dashboard     │
+        └──────────────────┘
+```
+
+---
+
+## 👩‍💻 Developer
+
+**Athi Jahnavi**
+
+B.Tech Final Year Student
+
+GitHub: **jahnaviathi7**
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**.
+
+See the [LICENSE](LICENSE) file for the complete license terms.
+
+---
+
 ## 🏗️ System Architecture
 
 ```text
@@ -94,11 +158,12 @@ Upload college study materials in PDF format for use with the College AI assista
              └────────────────┼────────────────┘
                               ▼
                     ┌──────────────────────┐
-                    │     Gemini AI        │
-                    │     AI Service       │
+                    │      Gemini AI       │
+                    │      AI Service      │
                     └──────────┬───────────┘
                                │
                                ▼
                     ┌──────────────────────┐
-                    │    AI Response       │
+                    │     AI Response      │
                     └──────────────────────┘
+```

@@ -58,3 +58,7 @@ chroma_db/
 # =========================
 .DS_Store
 Thumbs.db
+backend.zip
+requirements.zip
+student_assistant.db
+*.db

@@ -14,86 +14,32 @@ function Dashboard({
   pdfCount,
 }: DashboardProps) {
   return (
-    <section style={{ marginBottom: "28px" }}>
-      {/* Welcome Header */}
-      <div
-        style={{
-          background:
-            "linear-gradient(135deg, #2563eb 0%, #4f46e5 55%, #7c3aed 100%)",
-          borderRadius: "24px",
-          padding: "36px",
-          color: "white",
-          marginBottom: "24px",
-          boxShadow: "0 12px 35px rgba(79, 70, 229, 0.20)",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: "25px",
-            flexWrap: "wrap",
-          }}
-        >
+    <section style={styles.section}>
+      {/* Welcome Banner */}
+      <div style={styles.banner}>
+        <div style={styles.bannerContent}>
           <div>
-            <div
-              style={{
-                fontSize: "42px",
-                marginBottom: "12px",
-              }}
-            >
-              🤖
-            </div>
+            <div style={styles.robot}>🤖</div>
 
-            <h2
-              style={{
-                margin: "0 0 10px",
-                fontSize: "32px",
-                fontWeight: 700,
-              }}
-            >
+            <h2 style={styles.bannerTitle}>
               Welcome to Student AI
             </h2>
 
-            <p
-              style={{
-                margin: 0,
-                fontSize: "16px",
-                opacity: 0.9,
-                lineHeight: 1.6,
-                maxWidth: "600px",
-              }}
-            >
-              Your intelligent companion for study, career, and college
-              support.
+            <p style={styles.bannerText}>
+              Your intelligent companion for study,
+              career, and college support.
             </p>
           </div>
 
-          <div
-            style={{
-              background: "rgba(255,255,255,0.16)",
-              border: "1px solid rgba(255,255,255,0.25)",
-              padding: "12px 18px",
-              borderRadius: "30px",
-              fontSize: "14px",
-              fontWeight: 600,
-              whiteSpace: "nowrap",
-            }}
-          >
-            🟢 AI Services Online
+          <div style={styles.onlineBadge}>
+            <span>🟢</span>
+            AI Services Online
           </div>
         </div>
       </div>
 
       {/* Statistics */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
-          gap: "18px",
-        }}
-      >
+      <div style={styles.statsGrid}>
         <StatCard
           icon="💬"
           title="Questions"
@@ -147,70 +93,136 @@ function StatCard({
   description,
 }: StatCardProps) {
   return (
-    <div
-      style={{
-        background: "#ffffff",
-        borderRadius: "18px",
-        padding: "20px",
-        border: "1px solid #e5e7eb",
-        boxShadow: "0 5px 20px rgba(15, 23, 42, 0.06)",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: "16px",
-        }}
-      >
-        <div
-          style={{
-            width: "46px",
-            height: "46px",
-            borderRadius: "13px",
-            background: "#eff6ff",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "22px",
-          }}
-        >
+    <div style={styles.card}>
+      <div style={styles.cardTop}>
+        <div style={styles.iconBox}>
           {icon}
         </div>
 
-        <span
-          style={{
-            fontSize: "26px",
-            fontWeight: 700,
-            color: "#1e293b",
-          }}
-        >
+        <span style={styles.value}>
           {value}
         </span>
       </div>
 
-      <h3
-        style={{
-          margin: "0 0 6px",
-          fontSize: "16px",
-          color: "#1e293b",
-        }}
-      >
+      <h3 style={styles.cardTitle}>
         {title}
       </h3>
 
-      <p
-        style={{
-          margin: 0,
-          fontSize: "13px",
-          color: "#64748b",
-        }}
-      >
+      <p style={styles.description}>
         {description}
       </p>
     </div>
   );
 }
 
+const styles: {
+  [key: string]: React.CSSProperties;
+} = {
+  section: {
+    marginBottom: "28px",
+  },
+
+  banner: {
+    background:
+      "linear-gradient(135deg, #2563eb 0%, #4f46e5 55%, #7c3aed 100%)",
+    borderRadius: "24px",
+    padding: "36px",
+    color: "#ffffff",
+    marginBottom: "24px",
+    boxShadow:
+      "0 12px 35px rgba(79, 70, 229, 0.20)",
+  },
+
+  bannerContent: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "25px",
+    flexWrap: "wrap",
+  },
+
+  robot: {
+    fontSize: "42px",
+    marginBottom: "12px",
+  },
+
+  bannerTitle: {
+    margin: "0 0 10px",
+    fontSize: "32px",
+    fontWeight: 700,
+  },
+
+  bannerText: {
+    margin: 0,
+    fontSize: "16px",
+    opacity: 0.9,
+    lineHeight: 1.6,
+    maxWidth: "600px",
+  },
+
+  onlineBadge: {
+    background: "rgba(255,255,255,0.16)",
+    border:
+      "1px solid rgba(255,255,255,0.25)",
+    padding: "12px 18px",
+    borderRadius: "30px",
+    fontSize: "14px",
+    fontWeight: 600,
+    whiteSpace: "nowrap",
+  },
+
+  statsGrid: {
+    display: "grid",
+    gridTemplateColumns:
+      "repeat(auto-fit, minmax(170px, 1fr))",
+    gap: "18px",
+  },
+
+  card: {
+    background: "#ffffff",
+    borderRadius: "18px",
+    padding: "20px",
+    border: "1px solid #e5e7eb",
+    boxShadow:
+      "0 5px 20px rgba(15, 23, 42, 0.06)",
+  },
+
+  cardTop: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: "16px",
+  },
+
+  iconBox: {
+    width: "46px",
+    height: "46px",
+    borderRadius: "13px",
+    background: "#eff6ff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "22px",
+  },
+
+  value: {
+    fontSize: "26px",
+    fontWeight: 700,
+    color: "#1e293b",
+  },
+
+  cardTitle: {
+    margin: "0 0 6px",
+    fontSize: "16px",
+    color: "#1e293b",
+  },
+
+  description: {
+    margin: 0,
+    fontSize: "13px",
+    color: "#64748b",
+  },
+};
+
 export default Dashboard;
+```

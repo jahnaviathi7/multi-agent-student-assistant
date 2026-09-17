@@ -1,37 +1,61 @@
 import chromadb
-from sentence_transformers import SentenceTransformer
 
 from backend.rag.document_loader import load_documents
 from backend.rag.text_splitter import split_documents
+from backend.rag.embeddings import (
+    create_embeddings,
+    create_query_embedding,
+)
 
 
 CHROMA_PATH = "data/chroma_db"
 
+
+# Create ChromaDB client
 client = chromadb.PersistentClient(
     path=CHROMA_PATH
 )
 
+
+# Create or load collection
 collection = client.get_or_create_collection(
     name="college_documents"
 )
 
-embedding_model = SentenceTransformer(
-    "all-MiniLM-L6-v2"
-)
-
 
 def create_vector_database():
+    """
+    Load college PDFs, split them into chunks,
+    create lightweight embeddings and store them
+    in ChromaDB.
+    """
+
+    print(
+        "\n=============================================="
+    )
+    print(
+        "Creating College Document Vector Database"
+    )
+    print(
+        "=============================================="
+    )
 
     documents = load_documents()
 
     if not documents:
+
         print("No documents found.")
+
         return
 
-    chunks = split_documents(documents)
+    chunks = split_documents(
+        documents
+    )
 
     if not chunks:
+
         print("No chunks found.")
+
         return
 
     texts = [
@@ -39,9 +63,19 @@ def create_vector_database():
         for chunk in chunks
     ]
 
-    embeddings = embedding_model.encode(
+    print(
+        f"Creating embeddings for {len(texts)} chunks..."
+    )
+
+    embeddings = create_embeddings(
         texts
-    ).tolist()
+    )
+
+    if len(embeddings) == 0:
+
+        print("No embeddings created.")
+
+        return
 
     ids = [
         f"{chunk['filename']}_{chunk['chunk_id']}"
@@ -51,7 +85,7 @@ def create_vector_database():
     metadatas = [
         {
             "filename": chunk["filename"],
-            "chunk_id": chunk["chunk_id"]
+            "chunk_id": chunk["chunk_id"],
         }
         for chunk in chunks
     ]
@@ -59,19 +93,51 @@ def create_vector_database():
     collection.upsert(
         ids=ids,
         documents=texts,
-        embeddings=embeddings,
-        metadatas=metadatas
+        embeddings=embeddings.tolist(),
+        metadatas=metadatas,
     )
 
     print(
         f"Stored {len(chunks)} chunks in ChromaDB."
     )
 
+    print(
+        "Vector database creation completed."
+    )
+
 
 def update_vector_database():
+    """
+    Rebuild/update the college document
+    vector database.
+    """
 
-    print("\nUpdating vector database...")
+    print(
+        "\n=============================================="
+    )
+
+    print(
+        "Updating Vector Database"
+    )
+
+    print(
+        "=============================================="
+    )
 
     create_vector_database()
 
-    print("Vector database updated successfully.")
+    print(
+        "Vector database updated successfully."
+    )
+
+
+def get_query_embedding(query: str):
+    """
+    Create an embedding for the user's query.
+    """
+
+    embedding = create_query_embedding(
+        query
+    )
+
+    return embedding.tolist()
